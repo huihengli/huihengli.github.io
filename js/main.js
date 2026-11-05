@@ -1,12 +1,49 @@
 $(function () {
-    // resize window
-    $(window).resize(function () {
-        if ($(window).width() < 1280 && $(window).width()>540) {
-            $(".page").css({"width": $(window).width() - $(".side-card").width() - 90, "float": "left"})
-        } else {
-            $(".page").removeAttr("style")
-        }
+    // dark mode
+    function syncThemeIcon() {
+        var dark = document.documentElement.getAttribute("data-theme") === "dark";
+        $(".theme-toggle i").toggleClass("fa-moon", !dark).toggleClass("fa-sun", dark);
+    }
+    syncThemeIcon();
+
+    $(".theme-toggle").click(function () {
+        var next = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
+        document.documentElement.setAttribute("data-theme", next);
+        try { localStorage.setItem("theme", next); } catch (e) {}
+        syncThemeIcon();
     });
+
+    // current nav item: page path, plus the visible section on the home page
+    function headerOffset() {
+        return $("#page_header").outerHeight() + 16;
+    }
+
+    function updateActiveNav() {
+        var path = location.pathname.replace(/index\.html$/, "").replace(/\/$/, "");
+        var current = null;
+        var sections = [];
+
+        $(".menus_items a").each(function () {
+            if (this.hostname !== location.hostname) return;
+            var linkPath = this.pathname.replace(/index\.html$/, "").replace(/\/$/, "");
+            if (linkPath !== path) return;
+            var section = this.hash ? document.getElementById(this.hash.slice(1)) : null;
+            if (section) sections.push({ link: this, top: section.getBoundingClientRect().top });
+            else if (!this.hash) current = this;
+        });
+
+        sections.forEach(function (item) {
+            if (item.top <= headerOffset() + 8 || !current) current = item.link;
+        });
+
+        var atBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;
+        if (sections.length && atBottom) current = sections[sections.length - 1].link;
+
+        $(".menus_items a").removeClass("active");
+        if (current) $(current).addClass("active");
+    }
+    $(window).on("scroll resize", updateActiveNav);
+    updateActiveNav();
 
     // menu
     $(".menus_icon").click(function () {
@@ -73,6 +110,7 @@ $(function () {
             }, 700);
         },
         'pjax:end': function() {
+            updateActiveNav();
             if ($(".header_wrap").hasClass("menus-open")) {
                 $(".header_wrap").removeClass("menus-open").addClass("menus-close")
             }
@@ -93,7 +131,7 @@ $(function () {
                 target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
                 if (target.length) {
                     $('html,body').animate({
-                        scrollTop: target.offset().top
+                        scrollTop: target.offset().top - headerOffset()
                     }, 700);
                     return false;
                 }
