@@ -993,6 +993,11 @@ blockquote p {
   --accent: #1353d7;
   --accent-soft: #e8f0fd;
   --accent-line: #b9cdf3;
+  --heat-0: #ebeff5;
+  --heat-1: #b9cdf3;
+  --heat-2: #7aa2ec;
+  --heat-3: #3f74e0;
+  --heat-4: #1353d7;
   --serif: Georgia, "Noto Serif SC", "Songti SC", SimSun, serif;
   --sans: "Segoe UI", -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
   --mono: Consolas, "SF Mono", Menlo, monospace;
@@ -1008,6 +1013,11 @@ html[data-theme="dark"] {
   --accent: #8fb4ff;
   --accent-soft: #1e2b45;
   --accent-line: #3f5680;
+  --heat-0: #1f242d;
+  --heat-1: #1e3a6e;
+  --heat-2: #2d5bb5;
+  --heat-3: #4f86f0;
+  --heat-4: #8fb4ff;
   color-scheme: dark;
 }
 html {
@@ -1364,6 +1374,114 @@ blockquote {
   margin-top: 0.2rem;
   color: var(--accent);
   font-size: 1.5rem;
+}
+.gh-heatmap {
+  min-height: 17rem;
+  padding: 1.6rem 1.8rem;
+  color: var(--muted);
+  font-size: 1.35rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+.gh-heatmap:not(.gh-ready):not(.gh-error) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.gh-heatmap.gh-error {
+  min-height: 0;
+}
+.gh-heatmap a {
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px solid var(--accent-line);
+}
+.gh-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.4rem 1.6rem;
+  margin-bottom: 1.2rem;
+  font-size: 1.45rem;
+}
+.gh-head b {
+  color: var(--ink);
+  font-weight: 600;
+}
+.gh-scroll {
+  overflow-x: auto;
+  padding-bottom: 0.4rem;
+}
+.gh-graph {
+  display: grid;
+  grid-template-columns: 3rem minmax(0, 1fr);
+  min-width: 64rem;
+  column-gap: 0.6rem;
+}
+.gh-months {
+  display: grid;
+  grid-column: 2;
+  grid-template-columns: repeat(var(--weeks), minmax(0, 1fr));
+  gap: 3px;
+  margin-bottom: 0.4rem;
+  font-size: 1.15rem;
+  line-height: 1.2;
+}
+.gh-months span {
+  grid-row: 1;
+  white-space: nowrap;
+}
+.gh-days {
+  display: grid;
+  grid-template-rows: repeat(7, minmax(0, 1fr));
+  gap: 3px;
+  font-size: 1.1rem;
+}
+.gh-days span {
+  display: flex;
+  align-items: center;
+  line-height: 1;
+}
+.gh-cells {
+  display: grid;
+  grid-template-rows: repeat(7, auto);
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  gap: 3px;
+}
+.gh-cells i,
+.gh-legend i {
+  display: block;
+  aspect-ratio: 1;
+  background: var(--heat-0);
+  border-radius: 2px;
+}
+.gh-cells .gh-pad {
+  visibility: hidden;
+}
+.gh-heatmap i[data-l="1"] {
+  background: var(--heat-1);
+}
+.gh-heatmap i[data-l="2"] {
+  background: var(--heat-2);
+}
+.gh-heatmap i[data-l="3"] {
+  background: var(--heat-3);
+}
+.gh-heatmap i[data-l="4"] {
+  background: var(--heat-4);
+}
+.gh-legend {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 3px;
+  margin-top: 0.8rem;
+  font-size: 1.15rem;
+}
+.gh-legend i {
+  width: 11px;
+  margin: 0 1px;
 }
 .side-card .card-wrap {
   padding-left: 0;
